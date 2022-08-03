@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Business.Concrete;
+using DataAccess.Concrete.InMemory;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using DataAccess.Abstract;
 
 namespace ConsoleUI
 {
@@ -10,6 +12,11 @@ namespace ConsoleUI
     {
         static void Main(string[] args)
         {
+            ProductManager productManager = new ProductManager(new InMemoryProductDal());
+
+
+            Console.WriteLine("Hello World!");
         }
     }
+
 }
