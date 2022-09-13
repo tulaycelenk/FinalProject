@@ -1,5 +1,6 @@
 ﻿using DataAccess.Abstract;
 using Entities.Concrete;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -12,17 +13,32 @@ namespace DataAccess.Concrete.EntityFramework
     {
         public void Add(Product entity)
         {
-            throw new NotImplementedException();
+            using (NorthwindContex context = new NorthwindContex())
+            {
+                //veri kaynağından gönderdiğim producttan bir tane nesneye eşleştir referansı alıyor
+                var addedEntity = context.Entry(entity);
+                //Entity state ekleme silme güncelleme gibi işlemleri var burada ekleme yapıyoruz
+                addedEntity.State = EntityState.Added;
+                context.SaveChanges();
+            }        
         }
 
         public void Delete(Product entity)
         {
-            throw new NotImplementedException();
+            using (NorthwindContex context = new NorthwindContex())
+            {
+                var deletedEntity = context.Entry(entity);
+                deletedEntity.State = EntityState.Deleted;
+                context.SaveChanges();
+            }
         }
 
         public Product Get(Expression<Func<Product, bool>> filter)
         {
-            throw new NotImplementedException();
+            using (NorthwindContex context = new NorthwindContex())
+            {
+                return filter == null ? context.Set<Product>().ToList() : context.Set<Product>().Where(filter).ToList();
+            }
         }
 
         public List<Product> GetAll(Expression<Func<Product, bool>> filter = null)
@@ -37,7 +53,12 @@ namespace DataAccess.Concrete.EntityFramework
 
         public void Update(Product entity)
         {
-            throw new NotImplementedException();
+            using (NorthwindContex context = new NorthwindContex())
+            {
+                var updatedEntity = context.Entry(entity);
+                updatedEntity.State = EntityState.Modified;
+                context.SaveChanges();
+            }
         }
     }
 }
